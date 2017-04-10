@@ -2,84 +2,78 @@ import C from './constants'
 import fetch from 'isomorphic-fetch'
 
 export function addDay(resort, date, powder=false, backcountry=false) {
-	
-	// Any app logic here....NOT in Reducers!
 
-	return {
-		type: C.ADD_DAY,
-		payload: {resort,date,powder,backcountry}
-	}
+    return {
+        type: C.ADD_DAY,
+        payload: {resort,date,powder,backcountry}
+    }
 
 }
 
 export const removeDay = function(date) {
 
-	return {
-		type: C.REMOVE_DAY,
-		payload: date
-	}
+    return {
+        type: C.REMOVE_DAY,
+        payload: date
+    }
 
 }
 
 export const setGoal = (goal) => 
-	({
-		type: C.SET_GOAL,
-		payload: goal
-	})
+    ({
+        type: C.SET_GOAL,
+        payload: goal
+    })
 
 export const addError = (message) => 
    ({
-   	  type: C.ADD_ERROR,
-   	  payload: message
+      type: C.ADD_ERROR,
+      payload: message
    })
 
 export const clearError = index => 
-	({
-		type: C.CLEAR_ERROR,
-		payload: index
-	})   
+    ({
+        type: C.CLEAR_ERROR,
+        payload: index
+    })   
 
 export const changeSuggestions = suggestions => 
   ({
-  	type: C.CHANGE_SUGGESTIONS,
-  	payload: suggestions
+    type: C.CHANGE_SUGGESTIONS,
+    payload: suggestions
   })
 
 export const clearSuggestions = () => 
-	({
-		type: C.CLEAR_SUGGESTIONS
-	})
+    ({
+        type: C.CLEAR_SUGGESTIONS
+    })
 
+export const suggestResortNames = value => dispatch => {
 
+    dispatch({
+        type: C.FETCH_RESORT_NAMES
+    })
 
-export const suggestResortNames = (value) => dispatch => {
+    fetch('http://localhost:3333/resorts/' + value)
+        .then(response => response.json())
+        .then(suggestions => {
 
-	dispatch({
-		type: C.FETCH_RESORT_NAMES
-	})
+            dispatch({
+                type: C.CHANGE_SUGGESTIONS,
+                payload: suggestions
+            })
 
-	fetch('http://localhost:3333/resorts/' + value)
-		.then(resp => resp.json())
-		.then(suggestions => {
-			dispatch(
-				changeSuggestions(suggestions)
-			// {
-			// 	type: C.CHANGE_SUGGESTIONS,
-			// 	payload: suggestions
-			// }
-			)
+        })
+        .catch(error => {
 
-		})
-		.catch(error => {
-			dispatch(
-				addError(error.message)
-			)
+            dispatch(
+                addError(error.message)
+            )
 
-			dispatch({
-				type: C.CANCEL_FETCHING
-			})
-		})
+            dispatch({
+                type: C.CANCEL_FETCHING
+            })
+
+        })
 
 }
-
-

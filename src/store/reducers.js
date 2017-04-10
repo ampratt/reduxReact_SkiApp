@@ -1,9 +1,6 @@
 import C from '../constants'
 import { combineReducers } from 'redux'
 
-// store is meant to manage state ONLY
-// 1) READ current state or 
-// 2) mutate state by dispatching action 
 export const goal = (state=10, action) => 
 	(action.type === C.SET_GOAL) ? 
 		 parseInt(action.payload) :
