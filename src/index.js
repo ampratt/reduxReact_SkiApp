@@ -1,47 +1,45 @@
 import C from './constants'
-import appReducer from './store/reducers'
-import initialState from './initialState.json'
+import storeFactory from './store'
 
-let state = initialState
+const initialState = (localStorage['redux-store']) ?
+	JSON.parse(localStorage['redux-store']) :
+	{}
 
-console.log(`
+const saveState = () => {
+	const state = JSON.stringify(store.getState())
+	localStorage['redux-store'] = state
+}
 
-	Initial State
-	=============
-	goal: ${state.goal}
-	resorts: ${JSON.stringify(state.allSkiDays)}
-	fetching: ${state.resortNames.fetching}
-	suggestions: ${state.resortNames.suggestions}
+const store = storeFactory(initialState)
 
-`);
+store.subscribe(saveState)
 
-state = appReducer(state, {
-	type: C.SET_GOAL,
-	payload: 2
-})
-
-state = appReducer(state, {
+store.dispatch({
 	type: C.ADD_DAY,
 	payload: {
-		"resort": "mt something",
-		"date": "2017-12-2",
-		"powder": false,
-		"backcountry": true 
+		"resort": "Mt Shasta",
+		"date": "2016-10-28",
+		"powder": true,
+		"backcountry": true
 	}
 })
 
-state = appReducer(state, {
-	type: C.CHANGE_SUGGESTIONS,
-	payload: ["mt tallac", "mt hood", "mt something"]
+store.dispatch({
+	type: C.ADD_DAY,
+	payload: {
+		"resort": "Squaw Valley",
+		"date": "2016-3-28",
+		"powder": true,
+		"backcountry": false
+	}
 })
 
-console.log(`
-
-	Next State
-	=============
-	goal: ${state.goal}
-	resorts: ${JSON.stringify(state.allSkiDays)}
-	fetching: ${state.resortNames.fetching}
-	suggestions: ${state.resortNames.suggestions}
-
-`);
+store.dispatch({
+	type: C.ADD_DAY,
+	payload: {
+		"resort": "The Canyons",
+		"date": "2016-1-2",
+		"powder": false,
+		"backcountry": true
+	}
+})

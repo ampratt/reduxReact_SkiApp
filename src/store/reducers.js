@@ -95,15 +95,6 @@ export default combineReducers({
   })
 })
 
-// const resortNames = combineReducers({
-//   fetching,
-//   suggestions
-// })
 
-// const singleReducer = combineReducers({
-//   allSkiDays,
-//   goal,
-//   errors,
-//   resortNames
-// })
-// export default singleReducer
+
+
